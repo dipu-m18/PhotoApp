@@ -1,7 +1,7 @@
-package com.appsdeveloperblog.photoapp.api.users.ui.models;
+package com.appsdeveloperblog.photoapp.api.users.ui.model;
 
 public class CreateUserResponseModel {
-
+	
 	private String firstName;
 	private String lastName;
 	private String email;

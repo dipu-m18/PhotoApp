@@ -1,4 +1,4 @@
-package com.appsdeveloperblog.photoapp.api.account.ui.controllers;
+package com.appsdeveloperblog.photoapp.api.account.ui;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/account")
 public class AccountController {
-	
+
 	@GetMapping("/status/check")
-	public String status() {
-		return "Working...";
+	public String getStatus() {
+		return "Working";
 	}
 }

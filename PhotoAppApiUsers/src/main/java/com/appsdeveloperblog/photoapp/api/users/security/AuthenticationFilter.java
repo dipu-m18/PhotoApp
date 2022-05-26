@@ -19,7 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.appsdeveloperblog.photoapp.api.users.service.UsersService;
 import com.appsdeveloperblog.photoapp.api.users.shared.UserDto;
-import com.appsdeveloperblog.photoapp.api.users.ui.models.LoginRequestModel;
+import com.appsdeveloperblog.photoapp.api.users.ui.model.LoginRequestModel;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.jsonwebtoken.Jwts;
@@ -64,13 +64,14 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                                             FilterChain chain,
                                             Authentication auth) throws IOException, ServletException {
     	String userName = ((User) auth.getPrincipal()).getUsername();
+    	
     	UserDto userDetails = usersService.getUserDetailsByEmail(userName);
     	
-    	 String token = Jwts.builder()
-                 .setSubject(userDetails.getUserId())
-                 .setExpiration(new Date(System.currentTimeMillis() + Long.parseLong(environment.getProperty("token.expiration_time"))))
-                 .signWith(SignatureAlgorithm.HS512, environment.getProperty("token.secret") )
-                 .compact();
+        String token = Jwts.builder()
+                .setSubject(userDetails.getUserId())
+                .setExpiration(new Date(System.currentTimeMillis() + Long.parseLong(environment.getProperty("token.expiration_time"))))
+                .signWith(SignatureAlgorithm.HS512, environment.getProperty("token.secret") )
+                .compact();
         
         res.addHeader("token", token);
         res.addHeader("userId", userDetails.getUserId());

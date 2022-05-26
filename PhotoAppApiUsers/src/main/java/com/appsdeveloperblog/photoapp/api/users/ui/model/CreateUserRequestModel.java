@@ -1,4 +1,4 @@
-package com.appsdeveloperblog.photoapp.api.users.ui.models;
+package com.appsdeveloperblog.photoapp.api.users.ui.model;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -6,18 +6,22 @@ import javax.validation.constraints.Size;
 
 public class CreateUserRequestModel {
 	
-	@NotNull(message="First Name cannot be null")
-	@Size(min=2, message="First Name should not be less than 2 characters")
+	@NotNull(message="First name cannot be null.")
+	@Size(min=2, message="First name cannot be less than two characters.")
 	private String firstName;
-	@NotNull(message="Last Name cannot be null")
-	@Size(min=2, message="Last Name should not be less than 2 characters")
+	
+	@NotNull(message="Second name cannot be null.")
+	@Size(min=2, message="Last name cannot be less than two characters.")
 	private String lastName;
-	@NotNull(message="Password cannot be null")
-	@Size(min=8,max=16)
+	
+	@NotNull(message="Password cannot be null.")
+	@Size(min=8, max=16, message="Password must be equal or greater than 8 characters and less than equal to 16 characters.")
 	private String password;
-	@NotNull(message="Emails canot be null")
+	
+	@NotNull(message="Email cannot be null")
 	@Email
 	private String email;
+	
 	public String getFirstName() {
 		return firstName;
 	}
@@ -42,6 +46,5 @@ public class CreateUserRequestModel {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
 	
 }

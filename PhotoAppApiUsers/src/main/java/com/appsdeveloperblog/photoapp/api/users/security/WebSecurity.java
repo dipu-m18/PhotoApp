@@ -11,44 +11,43 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.appsdeveloperblog.photoapp.api.users.service.UsersService;
 
-
 @Configuration
 @EnableWebSecurity
 public class WebSecurity extends WebSecurityConfigurerAdapter{
 	
-	@Autowired
-	Environment environment;
-	
-	@Autowired
+
+	private Environment environment;
+	private UsersService userService;
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
-	
+
 	@Autowired
-	private UsersService usersService;
+	public WebSecurity(Environment environment, UsersService usersService, BCryptPasswordEncoder bCryptPasswordEncoder)
+	{
+		this.environment = environment;
+		this.userService = usersService;
+		this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+	}
 	
-	///configure method receives http security object as method argument.
-		//So I am going to configure http object to permit requests sent to a url path
-		//since we are going to use jwt token for our user authorization
-		
 	@Override
-	protected void configure(HttpSecurity http)throws Exception{
-	    http.csrf().disable();
-		http.authorizeRequests().antMatchers("/**").permitAll()
+	protected void configure(HttpSecurity http) throws Exception{
+		http.csrf().disable();
+		http.authorizeRequests().antMatchers( "/**").permitAll()
+	//	http.authorizeRequests().antMatchers("/**").hasIpAddress(environment.getProperty("gateway.ip"));
 		.and()
 		.addFilter(getAuthenticationFilter());
 		http.headers().frameOptions().disable();
 	}
 	
-	private AuthenticationFilter getAuthenticationFilter()throws Exception {
-		AuthenticationFilter authenticationFilter=new AuthenticationFilter(usersService, environment, authenticationManager());
-		//authenticationFilter.setAuthenticationManager(authenticationManager());
+	private AuthenticationFilter getAuthenticationFilter() throws Exception
+	{
+		AuthenticationFilter authenticationFilter = new AuthenticationFilter(userService, environment, authenticationManager());
 		authenticationFilter.setFilterProcessesUrl(environment.getProperty("login.url.path"));
 		return authenticationFilter;
 	}
 	
 	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception{
-		auth.userDetailsService( usersService).passwordEncoder(bCryptPasswordEncoder);
+	protected void configure(AuthenticationManagerBuilder auth)throws Exception{
+		auth.userDetailsService(userService).passwordEncoder(bCryptPasswordEncoder);
 	}
-	
 	
 }
